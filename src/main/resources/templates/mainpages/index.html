@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Home page</title>
+</head>
+<body>
+Hi there, I am a home page.
+
+<div sec:authorize="isAnonymous()">
+    This content is only shown to UNauthenticated users.
+    <a href="/register">Register</a>
+    <a href="/login">Login</a>
+</div>
+<div sec:authorize="isAuthenticated()">
+    This content is only shown to AUTHENTICATED users.
+    <a href="/logout">Logout</a>
+</div>
+
+
+</body>
+</html>

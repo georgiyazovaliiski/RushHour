@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>All Activities</title>
+</head>
+<body>
+Tuk shte ima activities
+<table>
+    <th:block th:each="activity : ${activities}">
+        <tr>
+            <td th:text="${activity.name}">...</td>
+        </tr>
+    </th:block>
+</table>
+</body>
+</html>

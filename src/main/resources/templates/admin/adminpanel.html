@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" th:href="@{/static/style.css}" type="text/css"/>
+</head>
+<body>
+<div th:replace="fragments/header.html :: header"></div>
+<th:block th:each="activity : ${Activities}">
+    <h1 th:text="${activity.getName()}"></h1>
+    <h1 th:text="${activity.getDuration()}"></h1>
+    <a th:href="@{admin/activity/delete(id=${activity.getId()})}">X</a>
+    <a th:href="@{admin/activity/edit(id=${activity.getId()})}">X</a>
+</th:block>
+<div th:replace="fragments/footer.html :: footer"></div>
+</body>
+</html>
