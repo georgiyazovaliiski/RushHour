@@ -6,7 +6,7 @@ import rushhour.rhproject.entities.UserDto;
 
 import java.util.Optional;
 
-public interface UserService extends CrudService<User>, UserDetailsService {
+public interface UserService extends CrudService<User> {
     User registerNewUserAccount(UserDto accountDto);
 
     Iterable<User> getAllUsers();

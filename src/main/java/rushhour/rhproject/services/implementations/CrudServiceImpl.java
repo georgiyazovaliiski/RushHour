@@ -34,8 +34,8 @@ public abstract class CrudServiceImpl<T extends BaseEntity> implements CrudServi
     public List<T> getAll() {
         return baseRepository.findAll();
     }*/
-
-    /*@Override
+/*
+    @Override
     public Optional<T> insert(T entity) {
         preInsert(entity);
 

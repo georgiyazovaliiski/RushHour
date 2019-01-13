@@ -8,11 +8,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import rushhour.rhproject.config.ConverterToList;
 import rushhour.rhproject.entities.Activity;
+import rushhour.rhproject.entities.Appointment;
+import rushhour.rhproject.modelviews.CreateActivityModel;
+import rushhour.rhproject.modelviews.CreateAppointmentModel;
 import rushhour.rhproject.services.interfaces.ActivityService;
+import rushhour.rhproject.services.interfaces.UserService;
 
 
-import java.util.List;
-import java.util.Optional;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/activities")
@@ -21,16 +26,18 @@ public class ActivityRESTController {
     //public static final Logger logger = LoggerFactory.getLogger(RestApiController.class);
 
     private ActivityService activityService; //Service which will do all data retrieval/manipulation work
+    private UserService userService;
 
     @Autowired
-    public ActivityRESTController(ActivityService activityService) {
+    public ActivityRESTController(ActivityService activityService, UserService userService) {
         this.activityService = activityService;
+        this.userService = userService;
     }
 
-// -------------------Retrieve All Users---------------------------------------------
+// -------------------Retrieve All Activity---------------------------------------------
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public ResponseEntity<List<Activity>> listAllUsers() {
+    public ResponseEntity<List<Activity>> listAllActivities() {
         List<Activity> activities = (List<Activity>) ConverterToList.getCollectionFromIteralbe(activityService.getAllActivities());
         if (activities.isEmpty()) {
             return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -43,7 +50,7 @@ public class ActivityRESTController {
     // -------------------Retrieve Single User------------------------------------------
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<?> getUser(@PathVariable("id") int id) {
+    public ResponseEntity<?> getActivity(@PathVariable("id") int id) {
         //logger.info("Fetching User with id {}", id);
         Optional<Activity> activity = activityService.getById(id);
         if (activity.isPresent() == false) {
@@ -56,25 +63,53 @@ public class ActivityRESTController {
     // -------------------Create a User-------------------------------------------
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> createActivity(@RequestBody Activity activity, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<?> createActivity(@RequestBody CreateActivityModel activity, UriComponentsBuilder ucBuilder) {
         //logger.info("Creating User : {}", user);
 
-        if (activityService.ifExists(activity)) {
+        //1-45
+
+        Long hoursToSeconds = Long.parseLong(activity.getDuration().split("-")[0])*3600;
+
+        Long minutesToSeconds = Long.parseLong(activity.getDuration().split("-")[1])*60;
+
+        Long seconds = hoursToSeconds+minutesToSeconds;
+
+        Duration duration = Duration.of(seconds, ChronoUnit.SECONDS);
+
+        Set<Appointment> appointments = new HashSet<>();
+        for (CreateAppointmentModel creating : activity.getAppointments()) {
+            Appointment a = new Appointment(
+                    creating.getName(),
+                    ConverterToList.StringToInstant(creating.getStartDate()),
+                    ConverterToList.StringToInstant(creating.getEndDate()),
+                    userService.getById(1).get()
+            );
+            appointments.add(a);
+        }
+
+        Activity entity = new Activity(
+                activity.getName(),
+                duration,
+                activity.getPrice(),
+                appointments
+        );
+
+        /*if (activityService.ifExists(activity)) {
             //logger.error("Unable to create. A User with name {} already exist", user.getName());
             return new ResponseEntity(new Error("Unable to create. A User with name " +
                     activity.getName() + " already exist."),HttpStatus.CONFLICT);
-        }
-        activityService.save(activity);     // MAP!!!
+        }*/
+        activityService.save(entity);     // MAP!!!
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/api/activities/{id}").buildAndExpand(activity.getId()).toUri());
+        headers.setLocation(ucBuilder.path("/api/activities/{id}").buildAndExpand(activity.getName()).toUri());
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
 
     // ------------------- Update a User ------------------------------------------------
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<?> updateUser(@PathVariable("id") int id, @RequestBody Activity activity) {
+    public ResponseEntity<?> updateActivity(@PathVariable("id") int id, @RequestBody Activity activity) {
 
         Optional<Activity> currentActivity = activityService.getById(id);
 
@@ -96,7 +131,7 @@ public class ActivityRESTController {
     // ------------------- Delete a User-----------------------------------------
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteUser(@PathVariable("id") int id) {
+    public ResponseEntity<?> deleteActivity(@PathVariable("id") int id) {
 
 
         Optional<Activity> activity = activityService.getById(id);
@@ -112,7 +147,7 @@ public class ActivityRESTController {
     // ------------------- Delete All Users-----------------------------
 
     @RequestMapping(value = "", method = RequestMethod.DELETE)
-    public ResponseEntity<Activity> deleteAllUsers() {
+    public ResponseEntity<Activity> deleteAllActivities() {
         activityService.deleteAll();
         return new ResponseEntity<Activity>(HttpStatus.NO_CONTENT);
     }

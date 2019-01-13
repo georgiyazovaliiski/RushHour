@@ -23,6 +23,19 @@ public class Activity extends BaseEntity{
 
     }
 
+    public Activity(String name, java.time.Duration duration, Double price) {
+        Name = name;
+        Duration = duration;
+        Price = price;
+    }
+
+    public Activity(String name, java.time.Duration duration, Double price, Set<Appointment> appointments) {
+        Name = name;
+        Duration = duration;
+        Price = price;
+        Appointments = appointments;
+    }
+
     public Activity(String name) {
         Name = name;
         Appointments = new HashSet<>();

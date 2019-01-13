@@ -1,6 +1,7 @@
 package rushhour.rhproject.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -82,6 +83,8 @@ public class UserServiceImpl extends CrudServiceImpl<User> implements UserServic
 
     @Override
     public Optional<User> getById(int Id) {
+        Optional<User> user = userRepository.findById(Id);
+        System.out.println("SHITNQ: " + user.get().getFirstName());
         return userRepository.findById(Id);
     }
 
@@ -93,22 +96,6 @@ public class UserServiceImpl extends CrudServiceImpl<User> implements UserServic
             return true;
         }
         return false;
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findFirstByEmail(username);
-        if(user == null){
-            throw new UsernameNotFoundException("User not found.");
-        }
-
-        Set<SimpleGrantedAuthority> roles = user.getRoles().stream().map(r->new SimpleGrantedAuthority(r.getRoleName())).collect(Collectors.toSet());
-
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPassword(),
-                roles
-        );
     }
 
     @Override

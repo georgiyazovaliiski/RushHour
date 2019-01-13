@@ -19,7 +19,7 @@ public class Appointment  extends BaseEntity{
     @JoinColumn(name = "user_id", referencedColumnName = "Id")
     private User User;
 
-    @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
     @JoinTable(
             name = "appointments_activities",
             joinColumns = { @JoinColumn(name = "appointment_id") },
@@ -29,6 +29,13 @@ public class Appointment  extends BaseEntity{
 
     public Appointment(){
 
+    }
+
+    public Appointment(String name, Instant startDate, Instant endDate, rushhour.rhproject.entities.User user) {
+        Name = name;
+        StartDate = startDate;
+        EndDate = endDate;
+        User = user;
     }
 
     public Appointment(String name, Instant startDate, Instant endDate, User user, Set<Activity> activities) {
