@@ -1,12 +1,9 @@
 package rushhour.rhproject.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import rushhour.rhproject.JWTSecurity.models.RegisterRequest;
 import rushhour.rhproject.entities.Role;
 import rushhour.rhproject.entities.User;
 import rushhour.rhproject.entities.UserDto;
@@ -18,7 +15,6 @@ import rushhour.rhproject.services.interfaces.UserService;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -37,14 +33,42 @@ public class UserServiceImpl extends CrudServiceImpl<User> implements UserServic
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
+    @Override
+    public User saveUser(RegisterRequest registerRequest) {
+        super.baseRepository.findAll();
 
+        if (emailExist(registerRequest.getEmail())) {
+            return null;
+        }
+        Set<Role> roles = new HashSet<Role>();
+        Role roleUser = roleRepository.findFirstByRoleName("ROLE_USER");
+        Role roleAdmin = roleRepository.findFirstByRoleName("ROLE_ADMIN");
+
+        roles.add(roleUser);
+        //roles.add(roleAdmin);
+
+        User user = new User(
+                registerRequest.getFirstName(),
+                registerRequest.getLastName(),
+                registerRequest.getEmail(),
+                bCryptPasswordEncoder.encode(registerRequest.getPassword()),
+                bCryptPasswordEncoder.encode(registerRequest.getPassword()),
+                "",
+                LocalDate.now(),
+                new ArrayList<>(),
+                roles
+        );
+
+
+
+        super.baseRepository.save(user);
+        return user;
+    }
 
     @Override
     public User registerNewUserAccount(UserDto accountDto){
 
         super.baseRepository.findAll();
-        userRepository.findAll();
-
 
         if (emailExist(accountDto.getEmail())) {
             return null;
@@ -74,6 +98,16 @@ public class UserServiceImpl extends CrudServiceImpl<User> implements UserServic
 
         return user;
         // the rest of the registration operation
+    }
+
+    @Override
+    public boolean ifUserExists(String email) {
+        return userRepository.existsUserByEmail(email);
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
     @Override

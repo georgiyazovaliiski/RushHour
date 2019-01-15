@@ -1,8 +1,8 @@
-package rushhour.rhproject.config;
+/*package rushhour.rhproject.config;*/
 /*
 import com.auth0.jwt.JWT;
 import com.auth0.samples.authapi.springbootauthupdated.user.ApplicationUser;*/
-import com.auth0.jwt.JWT;
+/*import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
-import static rushhour.rhproject.config.SecurityConstants.*;
+import static rushhour.rhproject.config.SecurityConstants.*;*/
 
 /*
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
@@ -28,11 +28,15 @@ import static com.auth0.samples.authapi.springbootauthupdated.security.SecurityC
 import static com.auth0.samples.authapi.springbootauthupdated.security.SecurityConstants.HEADER_STRING;
 import static com.auth0.samples.authapi.springbootauthupdated.security.SecurityConstants.SECRET;
 import static com.auth0.samples.authapi.springbootauthupdated.security.SecurityConstants.TOKEN_PREFIX;
-*/
+*//*
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
 
     private AuthenticationManager authenticationManager;
+
+    public JWTAuthenticationFilter(){
+
+    }
 
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
@@ -68,4 +72,4 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .sign(HMAC512(SECRET.getBytes()));
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
     }
-}
+}*/

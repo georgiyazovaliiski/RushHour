@@ -9,4 +9,6 @@ import rushhour.rhproject.entities.UserDto;
 @Repository
 public interface UserRepository extends BaseRepository<User> {
     User findFirstByEmail(String Email);
+    boolean existsUserByEmail(String Email);
+    User findByEmail(String Email);
 }

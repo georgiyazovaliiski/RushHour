@@ -95,9 +95,9 @@ public class ActivityRESTController {
         );
 
         /*if (activityService.ifExists(activity)) {
-            //logger.error("Unable to create. A User with name {} already exist", user.getName());
+            //logger.error("Unable to create. A User with name {} already exist", user.getFirstName());
             return new ResponseEntity(new Error("Unable to create. A User with name " +
-                    activity.getName() + " already exist."),HttpStatus.CONFLICT);
+                    activity.getFirstName() + " already exist."),HttpStatus.CONFLICT);
         }*/
         activityService.save(entity);     // MAP!!!
 

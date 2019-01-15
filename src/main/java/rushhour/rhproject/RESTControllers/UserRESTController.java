@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import rushhour.rhproject.config.ConverterToList;
 import rushhour.rhproject.entities.User;
+import rushhour.rhproject.entities.UserDto;
 import rushhour.rhproject.services.interfaces.UserService;
 
 import java.util.List;
@@ -54,19 +55,19 @@ public class UserRESTController {
 
     // -------------------Create a User-------------------------------------------
 
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> createUser(@RequestBody User user, UriComponentsBuilder ucBuilder) {
+    @PostMapping("sign-up")
+    public ResponseEntity<?> createUser(@RequestBody UserDto userDto, UriComponentsBuilder ucBuilder) {
         //logger.info("Creating User : {}", user);
 
-        if (userService.ifExists(user)) {
-            //logger.error("Unable to create. A User with name {} already exist", user.getName());
-            return new ResponseEntity(new Error("Unable to create. A User with name " +
-                    user.getFirstName() + " " + user.getLastName() + " already exist."),HttpStatus.CONFLICT);
+        if (userService.ifUserExists(userDto.getEmail())) {
+            //logger.error("Unable to create. A User with name {} already exist", user.getFirstName());
+            return new ResponseEntity(new Error("Unable to create. A User with email " +
+                    userDto.getEmail() + " already exists."),HttpStatus.CONFLICT);
         }
-        userService.save(user);     // MAP!!!
+        userService.registerNewUserAccount(userDto);     // MAP!!!
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/api/activities/{id}").buildAndExpand(user.getId()).toUri());
+        headers.setLocation(ucBuilder.path("/api/users/{id}").buildAndExpand("Some text").toUri());
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
 

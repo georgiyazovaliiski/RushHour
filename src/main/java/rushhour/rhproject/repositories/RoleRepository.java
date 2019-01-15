@@ -8,4 +8,5 @@ import rushhour.rhproject.entities.Role;
 @Repository
 public interface RoleRepository extends BaseRepository<Role> {
     Role findFirstByRoleName(String rolename);
+    Role findByRoleName(String roleName);
 }

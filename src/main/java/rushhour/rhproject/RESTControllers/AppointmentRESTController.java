@@ -64,7 +64,7 @@ public class AppointmentRESTController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public ResponseEntity<List<Appointment>> listAllActivities() {
+    public ResponseEntity<List<Appointment>> listAllAppointments() {
         List<Appointment> appointments = (List<Appointment>) ConverterToList.getCollectionFromIteralbe(appointmentService.getAllAppointments());
         if (appointments.isEmpty()) {
             return new ResponseEntity(HttpStatus.NO_CONTENT);

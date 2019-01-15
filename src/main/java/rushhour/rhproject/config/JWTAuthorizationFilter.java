@@ -1,4 +1,4 @@
-package rushhour.rhproject.config;
+/*package rushhour.rhproject.config;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -59,3 +59,4 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         return null;
     }
 }
+*/

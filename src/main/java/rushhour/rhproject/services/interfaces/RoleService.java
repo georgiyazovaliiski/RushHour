@@ -4,4 +4,5 @@ import rushhour.rhproject.entities.Role;
 
 public interface RoleService {
     Iterable<Role> getAllRoles();
+    Role getRoleByName(String roleName);
 }
