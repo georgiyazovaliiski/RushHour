@@ -28,11 +28,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         Set<SimpleGrantedAuthority> roles = user.getRoles().stream().map(r->new SimpleGrantedAuthority(r.getRoleName())).collect(Collectors.toSet());
 
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPassword(),
-                roles
-        );
+        return LoggedUser.create(user);
     }
 
 

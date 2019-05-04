@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class LoggedUser implements UserDetails {
     private Integer id;
 
-    private String username;
+    private String email;
 
     private String password;
 
@@ -25,7 +25,7 @@ public class LoggedUser implements UserDetails {
 
     public LoggedUser(Integer id, String email, String password, Collection<? extends GrantedAuthority> authorities) {
             this.id = id;
-            this.username = email;
+            this.email = email;
             this.password = password;
         this.authorities = authorities;
     }
@@ -49,7 +49,7 @@ public class LoggedUser implements UserDetails {
 
 
     public String getEmail() {
-        return username;
+        return email;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class LoggedUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.username;
+        return this.email;
     }
 
     @Override
